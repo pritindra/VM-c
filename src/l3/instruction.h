@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-uint16_t memory[UINT16_MAX];
-uint16_t reg[R_COUNT];
-
 // registers
 enum
 {
@@ -22,6 +19,13 @@ enum
     R_PC, /* program counter */
     R_COND,
     R_COUNT
+};
+
+// special registers
+enum
+{
+    MR_KBSR = 0xFE00, /* keyboard status */
+    MR_KBDR = 0xFE02  /* keyboard data */
 };
 
 // opcodes
@@ -65,12 +69,21 @@ enum
     TRAP_HALT = 0x25   /* halt the program */
 };
 
+// macros
+uint16_t memory[UINT16_MAX];
+uint16_t reg[R_COUNT];
+
+// lib functions
 uint16_t sign_extend(uint16_t x, int bit_count);
 void update_flags(uint16_t r);
+
+void mem_write(uint16_t address, uint16_t val);
+uint16_t mem_read(uint16_t address);
 
 // instruction functions
 void ADD(uint16_t instr);
 void LDI(uint16_t instr);
+void AND(uint16_t instr);
 void NOT(uint16_t instr);
 void BR(uint16_t instr);
 void JMP(uint16_t instr);

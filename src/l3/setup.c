@@ -1,4 +1,6 @@
 #include "setup.h"
+#include "instruction.h"
+
 
 uint16_t check_key()
 {

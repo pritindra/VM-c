@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "instruction.h"
+#include "setup.h"
 
 // sign extension and flag functions 
 uint16_t sign_extend(uint16_t x, int bit_count)
@@ -30,6 +31,29 @@ void update_flags(uint16_t r)
     {
         reg[R_COND] = FL_POS;
     }
+}
+
+// memory mapping 
+void mem_write(uint16_t address, uint16_t val)
+{
+    memory[address] = val;
+}
+
+uint16_t mem_read(uint16_t address)
+{
+    if (address == MR_KBSR)
+    {
+        if (check_key())
+        {
+            memory[MR_KBSR] = (1 << 15);
+            memory[MR_KBDR] = getchar();
+        }
+        else
+        {
+            memory[MR_KBSR] = 0;
+        }
+    }
+    return memory[address];
 }
 
 // instruction functions
@@ -122,7 +146,6 @@ void JSR (uint16_t instr)
         uint16_t r1 = (instr >> 6) & 0x7;
         reg[R_PC] = reg[r1]; /* JSRR */
     }
-    break;
 }
 
 void LD (uint16_t instr) 
