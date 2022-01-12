@@ -45,48 +45,68 @@ int main(int argc, const char* argv[])
                 ADD(instr);
                 break;
             case OP_AND:
-                {AND, 7}
+                AND(instr);
                 break;
             case OP_NOT:
-                {NOT, 7}
+                NOT(instr);
                 break;
             case OP_BR:
-                {BR, 7}
+                BR (instr);
                 break;
             case OP_JMP:
-                {JMP, 7}
+                JMP(instr);
                 break;
             case OP_JSR:
-                {JSR, 7}
+                JSR(instr);
                 break;
             case OP_LD:
-                {LD, 7}
+                LD(instr);
                 break;
             case OP_LDI:
-                {LDI, 6}
+                LDI(instr);
                 break;
             case OP_LDR:
-                {LDR, 7}
+                LDR(instr);
                 break;
             case OP_LEA:
-                {LEA, 7}
+                LEA(instr);
                 break;
             case OP_ST:
-                {ST, 7}
+                ST(instr);
                 break;
             case OP_STI:
-                {STI, 7}
+                STI(instr);
                 break;
             case OP_STR:
-                {STR, 7}
+                STR(instr);
                 break;
             case OP_TRAP:
-                {TRAP, 8}
+                switch (instr & 0xFF)
+                {
+                    case TRAP_GETC:
+                        GETC();
+                        break;
+                    case TRAP_OUT:
+                        OUT();
+                        break;
+                    case TRAP_PUTS:
+                        PUTS();
+                        break;
+                    case TRAP_IN:
+                        IN();
+                        break;
+                    case TRAP_PUTSP:
+                        PUTSP();
+                        break;
+                    case TRAP_HALT:
+                        HALT(running);
+                        break;
+                }
                 break;
             case OP_RES:
             case OP_RTI:
             default:
-                {BAD OPCODE, 7}
+                abort();
                 break;
         }
     }
